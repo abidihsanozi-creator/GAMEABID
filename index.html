@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sahabat Alam Liar – Menu Game</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1D9E75;
+    --teal-light: #E1F5EE;
+    --teal-dark: #085041;
+    --purple: #6C4EBD;
+    --purple-light: #EEEDFE;
+    --amber: #E8960A;
+    --amber-light: #FFF8E1;
+    --bg: #F6FDF9;
+    --text: #1a2e25;
+    --muted: #6b8f7e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 36px 16px 60px;
+  }
+
+  header { text-align: center; margin-bottom: 40px; }
+  .tag {
+    display: inline-block;
+    background: var(--teal);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 5px 16px;
+    border-radius: 99px;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: clamp(28px, 7vw, 48px);
+    font-weight: 800;
+    color: var(--teal-dark);
+    line-height: 1.15;
+  }
+  h1 .accent { color: var(--teal); }
+  .header-sub {
+    font-size: 16px;
+    color: var(--muted);
+    margin-top: 10px;
+    font-weight: 600;
+  }
+  .animals-row { font-size: 36px; margin-top: 12px; letter-spacing: 6px; }
+
+  .cp-badges {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 18px 0 10px;
+  }
+  .cp-badge {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 99px;
+  }
+  .cp1 { background: var(--teal-light); color: var(--teal-dark); }
+  .cp2 { background: var(--purple-light); color: #3C3489; }
+  .cp3 { background: var(--amber-light); color: #7A4E00; }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    max-width: 960px;
+    width: 100%;
+  }
+
+  .game-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 28px 24px;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 4px 24px rgba(0,0,0,.07);
+    transition: transform .2s, box-shadow .2s;
+    border: 2px solid transparent;
+  }
+  .game-card:hover { transform: translateY(-6px); box-shadow: 0 12px 36px rgba(0,0,0,.12); }
+  .game-card.c1:hover { border-color: var(--teal); }
+  .game-card.c2:hover { border-color: var(--purple); }
+  .game-card.c3:hover { border-color: var(--amber); }
+
+  .card-num {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    padding: 3px 12px;
+    border-radius: 99px;
+    width: fit-content;
+  }
+  .num1 { background: var(--teal-light); color: var(--teal-dark); }
+  .num2 { background: var(--purple-light); color: #3C3489; }
+  .num3 { background: var(--amber-light); color: #7A4E00; }
+
+  .card-emoji { font-size: 52px; }
+  .card-title {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .card-desc { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .card-tag {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 99px;
+    background: #f0f0f0;
+    color: #555;
+  }
+  .card-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    width: fit-content;
+    transition: opacity .15s;
+  }
+  .cta1 { background: var(--teal); }
+  .cta2 { background: var(--purple); }
+  .cta3 { background: var(--amber); }
+  .game-card:hover .card-cta { opacity: .88; }
+
+  footer {
+    margin-top: 48px;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  footer strong { color: var(--teal-dark); }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="tag">Permainan Edukatif</span>
+  <h1>Sahabat <span class="accent">Alam Liar</span></h1>
+  <p class="header-sub">Kenali Hewan, Cintai Alam!</p>
+  <div class="animals-row">🐸 🐰 🐢 🐄</div>
+  <div class="cp-badges">
+    <span class="cp-badge cp1">CP 1 · Pengetahuan</span>
+    <span class="cp-badge cp2">CP 2 · Sikap</span>
+    <span class="cp-badge cp3">CP 3 · Keterampilan</span>
+  </div>
+</header>
+
+<div class="cards-grid">
+
+  <a href="game1-kuis-hewan.html" class="game-card c1">
+    <span class="card-num num1">Game 1</span>
+    <div class="card-emoji">🧠</div>
+    <div class="card-title">Kuis Tebak Hewan</div>
+    <p class="card-desc">Jawab 8 pertanyaan seru tentang katak, kelinci, kura-kura, dan sapi. Setiap jawaban disertai fakta unik!</p>
+    <div class="card-tags">
+      <span class="card-tag">Pilihan ganda</span>
+      <span class="card-tag">8 soal</span>
+      <span class="card-tag">CP 1 · CP 3</span>
+    </div>
+    <span class="card-cta cta1">Mulai Kuis →</span>
+  </a>
+
+  <a href="game2-cocokkan-habitat.html" class="game-card c2">
+    <span class="card-num num2">Game 2</span>
+    <div class="card-emoji">🗺️</div>
+    <div class="card-title">Jelajah Habitat</div>
+    <p class="card-desc">Tempatkan 8 hewan ke zona habitat yang benar: air/kolam, padang rumput, atau hutan. Klik & cocokkan!</p>
+    <div class="card-tags">
+      <span class="card-tag">Drag & drop</span>
+      <span class="card-tag">8 hewan</span>
+      <span class="card-tag">CP 1 · CP 2</span>
+    </div>
+    <span class="card-cta cta2">Mulai Jelajah →</span>
+  </a>
+
+  <a href="game3-memory-hewan.html" class="game-card c3">
+    <span class="card-num num3">Game 3</span>
+    <div class="card-emoji">🃏</div>
+    <div class="card-title">Memory Hewan</div>
+    <p class="card-desc">Pasangkan kartu emoji hewan dengan nama tulisannya. Pilih dari 3 level: Mudah, Sedang, atau Sulit!</p>
+    <div class="card-tags">
+      <span class="card-tag">Memory match</span>
+      <span class="card-tag">3 level</span>
+      <span class="card-tag">CP 2 · CP 3</span>
+    </div>
+    <span class="card-cta cta3">Mulai Memory →</span>
+  </a>
+
+</div>
+
+<footer>
+  <p>Dibuat untuk permainan <strong>Sahabat Alam Liar</strong> · Pembelajaran hewan untuk anak usia 4–12 tahun</p>
+</footer>
+
+</body>
+</html>

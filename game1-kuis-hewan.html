@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kuis Tebak Hewan – Sahabat Alam Liar</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;900&family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1D9E75;
+    --teal-light: #E1F5EE;
+    --teal-dark: #085041;
+    --amber: #F5A623;
+    --amber-light: #FFF8E7;
+    --red: #E74C3C;
+    --red-light: #FDECEA;
+    --bg: #F0FAF6;
+    --card: #fff;
+    --text: #1a2e25;
+    --muted: #6b8f7e;
+    --radius: 20px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24px 16px 40px;
+  }
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .game-label {
+    display: inline-block;
+    background: var(--teal);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .08em;
+    padding: 4px 14px;
+    border-radius: 99px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: clamp(22px, 5vw, 34px);
+    font-weight: 800;
+    color: var(--teal-dark);
+    line-height: 1.2;
+  }
+  h1 span { color: var(--teal); }
+  .subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .progress-bar-wrap {
+    width: 100%;
+    max-width: 520px;
+    background: #c7e8d8;
+    border-radius: 99px;
+    height: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--teal);
+    border-radius: 99px;
+    transition: width .4s ease;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+    max-width: 520px;
+    width: 100%;
+    margin-bottom: 6px;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    max-width: 520px;
+    width: 100%;
+    box-shadow: 0 4px 32px rgba(29,158,117,.10);
+  }
+
+  .animal-display {
+    font-size: 80px;
+    text-align: center;
+    margin-bottom: 12px;
+    animation: bounceIn .4s ease;
+  }
+  @keyframes bounceIn {
+    0% { transform: scale(.5); opacity: 0; }
+    70% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .question {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: clamp(16px, 3.5vw, 20px);
+    font-weight: 700;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .opt-btn {
+    padding: 14px 12px;
+    border-radius: 14px;
+    border: 2px solid #d4ede3;
+    background: var(--teal-light);
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--teal-dark);
+    cursor: pointer;
+    transition: all .18s;
+    line-height: 1.3;
+    text-align: center;
+  }
+  .opt-btn:hover:not(:disabled) {
+    border-color: var(--teal);
+    background: #c7e8d8;
+    transform: translateY(-2px);
+  }
+  .opt-btn.correct {
+    background: var(--teal);
+    border-color: var(--teal-dark);
+    color: #fff;
+  }
+  .opt-btn.wrong {
+    background: var(--red-light);
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  .feedback-box {
+    min-height: 44px;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 16px;
+    transition: all .2s;
+  }
+  .feedback-box.correct { background: var(--teal-light); color: var(--teal-dark); }
+  .feedback-box.wrong { background: var(--red-light); color: var(--red); }
+  .feedback-box.empty { background: transparent; }
+
+  .next-btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .18s, transform .15s;
+  }
+  .next-btn:hover { background: var(--teal-dark); transform: translateY(-1px); }
+  .next-btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+  /* Result screen */
+  .result-screen { text-align: center; }
+  .result-emoji { font-size: 72px; margin-bottom: 12px; animation: bounceIn .5s ease; }
+  .result-score {
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 52px;
+    font-weight: 900;
+    color: var(--teal);
+    line-height: 1;
+  }
+  .result-sub { font-size: 15px; color: var(--muted); margin: 6px 0 24px; }
+  .result-msg {
+    background: var(--teal-light);
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--teal-dark);
+    margin-bottom: 20px;
+  }
+  .stat-row { display: flex; gap: 12px; justify-content: center; margin-bottom: 24px; }
+  .stat-pill {
+    padding: 8px 20px;
+    border-radius: 99px;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .stat-pill.b { background: var(--teal-light); color: var(--teal-dark); }
+  .stat-pill.s { background: var(--red-light); color: var(--red); }
+
+  .restart-btn {
+    display: inline-block;
+    padding: 14px 36px;
+    border-radius: 14px;
+    border: none;
+    background: var(--teal);
+    color: #fff;
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background .18s, transform .15s;
+  }
+  .restart-btn:hover { background: var(--teal-dark); transform: translateY(-2px); }
+
+  .home-link {
+    margin-top: 20px;
+    display: block;
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+  }
+  .home-link:hover { color: var(--teal); }
+
+  @media (max-width: 400px) {
+    .options { grid-template-columns: 1fr; }
+    .card { padding: 24px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <span class="game-label">Game 1 · Sahabat Alam Liar</span>
+  <h1>Kuis <span>Tebak Hewan</span></h1>
+  <p class="subtitle">8 pertanyaan seru tentang hewan kesayanganmu!</p>
+</header>
+
+<div class="progress-label" id="prog-label">
+  <span id="prog-text">Soal 1 dari 8</span>
+  <span id="prog-pct">0%</span>
+</div>
+<div class="progress-bar-wrap">
+  <div class="progress-bar-fill" id="prog-bar" style="width:0%"></div>
+</div>
+
+<div class="card" id="quiz-card">
+  <div class="animal-display" id="animal"></div>
+  <p class="question" id="question"></p>
+  <div class="options" id="options"></div>
+  <div class="feedback-box empty" id="feedback"></div>
+  <button class="next-btn" id="next-btn" disabled onclick="nextQ()">Lanjut →</button>
+</div>
+
+<a href="index.html" class="home-link">← Kembali ke menu</a>
+
+<script>
+const questions = [
+  { emoji:"🐸", q:"Di mana katak biasanya tinggal?", opts:["Di kolam dan sungai","Di padang rumput","Di dalam laut","Di atas pohon tinggi"], ans:0, fact:"Katak suka hidup di dekat air dan tempat lembab!" },
+  { emoji:"🐰", q:"Apa makanan utama kelinci?", opts:["Ikan segar","Wortel dan rumput","Daging ayam","Serangga kecil"], ans:1, fact:"Kelinci adalah herbivora, mereka suka sayuran dan rumput!" },
+  { emoji:"🐢", q:"Apa keistimewaan kura-kura?", opts:["Bisa terbang tinggi","Punya cangkang pelindung","Hidup hanya di laut","Berlari sangat cepat"], ans:1, fact:"Cangkang kura-kura adalah bagian dari tulangnya sendiri!" },
+  { emoji:"🐄", q:"Apa yang dihasilkan sapi untuk manusia?", opts:["Telur dan madu","Susu dan daging","Wol dan sutra","Ikan dan kerang"], ans:1, fact:"Sapi menghasilkan susu yang kita minum setiap hari!" },
+  { emoji:"🐸", q:"Bagaimana katak bergerak di air?", opts:["Meluncur dengan sirip","Berenang dengan kaki belakang","Terbang di atas air","Berjalan di dasar kolam"], ans:1, fact:"Kaki belakang katak yang panjang sangat cocok untuk berenang!" },
+  { emoji:"🐰", q:"Berapa lama telinga kelinci biasanya?", opts:["Sangat pendek","Sama dengan tubuhnya","Panjang, bisa 10 cm lebih","Tidak punya telinga"], ans:2, fact:"Telinga panjang kelinci membantu mendengar musuh dari jauh!" },
+  { emoji:"🐢", q:"Kura-kura termasuk kelompok hewan apa?", opts:["Mamalia","Reptil","Burung","Amfibi"], ans:1, fact:"Kura-kura adalah reptil berdarah dingin yang luar biasa!" },
+  { emoji:"🐄", q:"Di mana sapi biasanya dipelihara?", opts:["Di hutan lebat","Di padang rumput / kandang","Di tepi pantai","Di puncak gunung"], ans:1, fact:"Sapi butuh padang rumput luas untuk merumput setiap hari!" },
+];
+
+let cur = 0, score = 0, benar = 0, salah = 0, answered = false;
+
+function renderQ() {
+  const q = questions[cur];
+  answered = false;
+  document.getElementById('animal').textContent = q.emoji;
+  document.getElementById('question').textContent = q.q;
+  document.getElementById('feedback').textContent = '';
+  document.getElementById('feedback').className = 'feedback-box empty';
+  document.getElementById('next-btn').disabled = true;
+
+  const pct = Math.round((cur / questions.length) * 100);
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = 'Soal ' + (cur + 1) + ' dari ' + questions.length;
+  document.getElementById('prog-pct').textContent = pct + '%';
+
+  const opts = document.getElementById('options');
+  opts.innerHTML = q.opts.map((o, i) =>
+    `<button class="opt-btn" onclick="choose(${i})">${o}</button>`
+  ).join('');
+}
+
+function choose(i) {
+  if (answered) return;
+  answered = true;
+  const q = questions[cur];
+  const btns = document.querySelectorAll('.opt-btn');
+  btns.forEach(b => b.disabled = true);
+
+  if (i === q.ans) {
+    btns[i].classList.add('correct');
+    document.getElementById('feedback').textContent = '✅ Benar! ' + q.fact;
+    document.getElementById('feedback').className = 'feedback-box correct';
+    score++; benar++;
+  } else {
+    btns[i].classList.add('wrong');
+    btns[q.ans].classList.add('correct');
+    document.getElementById('feedback').textContent = '❌ Belum tepat. ' + q.fact;
+    document.getElementById('feedback').className = 'feedback-box wrong';
+    salah++;
+  }
+  document.getElementById('next-btn').disabled = false;
+}
+
+function nextQ() {
+  cur++;
+  if (cur >= questions.length) showResult();
+  else renderQ();
+}
+
+function showResult() {
+  const pct = Math.round((score / questions.length) * 100);
+  const emoji = pct === 100 ? '🏆' : pct >= 75 ? '🌟' : pct >= 50 ? '😊' : '🐣';
+  const msg = pct === 100 ? 'Sempurna! Kamu ahli hewan sejati!' :
+              pct >= 75 ? 'Bagus sekali! Hampir sempurna!' :
+              pct >= 50 ? 'Cukup baik! Terus belajar!' : 'Jangan menyerah, coba lagi!';
+  document.getElementById('prog-bar').style.width = '100%';
+  document.getElementById('prog-pct').textContent = '100%';
+  document.getElementById('quiz-card').innerHTML = `
+    <div class="result-screen">
+      <div class="result-emoji">${emoji}</div>
+      <div class="result-score">${score}/${questions.length}</div>
+      <p class="result-sub">Skor kamu</p>
+      <div class="result-msg">${msg}</div>
+      <div class="stat-row">
+        <span class="stat-pill b">✅ Benar: ${benar}</span>
+        <span class="stat-pill s">❌ Salah: ${salah}</span>
+      </div>
+      <button class="restart-btn" onclick="restart()">🔄 Main lagi</button>
+    </div>
+  `;
+}
+
+function restart() {
+  cur = 0; score = 0; benar = 0; salah = 0; answered = false;
+  document.getElementById('quiz-card').innerHTML = `
+    <div class="animal-display" id="animal"></div>
+    <p class="question" id="question"></p>
+    <div class="options" id="options"></div>
+    <div class="feedback-box empty" id="feedback"></div>
+    <button class="next-btn" id="next-btn" disabled onclick="nextQ()">Lanjut →</button>
+  `;
+  renderQ();
+}
+
+renderQ();
+</script>
+</body>
+</html>
